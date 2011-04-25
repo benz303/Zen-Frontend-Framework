@@ -1,4 +1,8 @@
 class Framework < Source
+  def init
+    
+  end
+  
   def styles
   
   end

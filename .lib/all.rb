@@ -58,6 +58,7 @@ class Script < Source
       @file = '/.tmp/' + @name unless @file
     end
     @compress = @opt[:compass] ? @opt[:compass] : ( @opt[:url] ? false : true )
+    init if defined? init
   end
   
   def update
