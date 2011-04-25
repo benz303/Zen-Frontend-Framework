@@ -1,7 +1,6 @@
 $all = {}
-
 class Source
-  attr_accessor :opt, :name, :source, :type
+  attr_accessor :opt, :name, :source, :type, :file
   
   def self.new(*opt)
     if opt[0].length > 0
@@ -11,33 +10,42 @@ class Source
   
   def initialize(*opt)
     @opt = opt[0]
-    if @opt[:url]
+    if @opt[:file]
+      if File.exists? @opt[:file]
+        @file = @opt[:file]
+      elsif File.exists? File.join(TMP, @opt[:file])
+        @file = File.join(TMP, @opt[:file])
+      else
+        l @opt[:file], 404
+      end
+      @source = { :loc => @file }
+    elsif @opt[:url]
       @source = { :url => @opt[:url] }
-      realname = /\/([^\/]+)\.(css|sass|scss|js|coffee)$/.match @opt[:url]
-      @name = realname[1]
-      @type = realname[2]
+      unless @file
+        @file = File.join TMP, /\/([^\/]+)\.(css|sass|scss|js|coffee|jpg|jpeg|gif|png|git)$/.match(@opt[:url])[0]
+      end
     elsif @opt[:git]
       @source = { :git => @opt[:git] }
-      @name = @opt[:git][/\/([^\/]+)\.git/]
-    elsif @opt[:loc]
-      @source = { :loc => @opt[:loc] }
+      @file = File.join TMP, @opt[:git][/\/([^\/]+)\.git/] unless @file
+    else
+      l opt, 404
     end
+    @type = File.extname(@file)
     if @opt[:as]
       @name = @opt[:as]
       $all[@name.to_sym] = self
     end
-  end
-  
-  def realname
-    return [@name, @type].compact.join '.'
+    
+    update unless exists?
+    init if defined? init
   end
   
   def realpath
-    return File.join TMP, realname
+    return @file
   end
   
   def exists?
-    File.exists? realpath
+    File.exists? @file
   end
   
   def update

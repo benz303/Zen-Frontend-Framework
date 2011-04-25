@@ -7,7 +7,7 @@ end
 
 class Scripts < List
   def to_s
-    @list.map{ |script| script.to_s }.join ';'
+    @list.map{ |s| s.to_s }.join ';'
   end
 end
 

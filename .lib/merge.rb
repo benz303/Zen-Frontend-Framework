@@ -8,6 +8,11 @@ def merge(*opt)
       styles.push source if source.class == Style
       scripts.push source if source.class == Script
       images.push source if source.class == Image
+      if source.class == Framework
+        source.css.each{ |s| styles.push s } if source.css.length > 0
+        source.js.each{ |s| scripts.push s } if source.js.length > 0
+        source.img.each{ |s| images.push s } if source.img.length > 0
+      end
     end
     if styles.length > 0
       file = File.join ROOT, 'src', name + '.css'

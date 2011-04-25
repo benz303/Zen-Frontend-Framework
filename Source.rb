@@ -7,12 +7,12 @@ merge [:jquery, :underscore] => 'core2'
 
 merge framework(:git => 'https://github.com/jquery/jquery-ui.git',
   :js => {
-    :file => 'demos/index.html',
-    :find => lambda { |f| f.readlines.join('').match(/<script.*src="([^"]+)/).map{ |file| file.gsub(/^\.\.\//, '') } }
+    :path => 'demos/index.html',
+    :find => lambda { |f| f.scan(/<script.*src="([^"]+)/ix).map{ |file| file[0] } }
   },
   :css => {
     :file => 'themes/base/jquery.ui.all.css'
   },
   :img => {
-    :file => 'themes/base/images/*.png'
+    :dir => 'themes/base/images/*.png'
   }) => 'jqueryui'
