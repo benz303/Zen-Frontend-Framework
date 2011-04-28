@@ -5,8 +5,13 @@ class Image < Source
 end
 
 class Images < List
-  def to_s
-    @list.map{ |s| s.to_s }
+  def merge name
+    to = File.join SRC, realtype, name
+    l '  => ' + to, :info
+    Dir.mkdir to unless File.exists? to
+    @list.each do |img|
+      FileUtils.cp img.file, File.join(SRC, realtype, name, File.basename(img.file))
+    end
   end
 end
 

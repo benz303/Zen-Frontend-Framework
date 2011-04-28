@@ -67,6 +67,19 @@ class Source
       exit!
     end
   end
+  
+  def realtype
+    case @type
+      when 'css', 'scss', 'sass'
+        return 'css'
+      when 'js', 'coffee'
+        return 'js'
+      when 'jpg', 'jpeg', 'gif', 'png'
+        return 'img'
+      else
+        return 'unknown'
+    end
+  end
 end
 
 class List
@@ -76,5 +89,24 @@ class List
   
   def initialize(*list)
     @list = list[0]
+  end
+  
+  def realtype
+    case self.class.name
+      when 'Styles'
+        return 'css'
+      when 'Scripts'
+        return 'js'
+      when 'Images'
+        return 'img'
+      else
+        return 'unknown'
+    end
+  end
+  
+  def merge name
+    to = File.join SRC, realtype, name + '.' + realtype
+    l '  => ' + to, :info
+    File.open(to, 'w'){ |f| f.write to_s }
   end
 end

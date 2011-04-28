@@ -15,19 +15,13 @@ def merge(*opt)
       end
     end
     if styles.length > 0
-      file = File.join ROOT, 'src', name + '.css'
-      File.open(file, 'w'){ |f| f.write Styles.new(styles).to_s }
-      l name + '.css => ' + file, :info
+      Styles.new(styles).merge name
     end
     if scripts.length > 0
-      file = File.join ROOT, 'src', name + '.js'
-      File.open(file, 'w'){ |f| f.write Scripts.new(scripts).to_s }
-      l name + '.js => ' + file, :info
+      Scripts.new(scripts).merge name
     end
     if images.length > 0
-      file = File.join ROOT, 'src', name + '.img'
-      File.open(file, 'w'){ |f| f.write Images.new(images).to_s }
-      l name + '.img => ' + file, :info
+      Images.new(images).merge name
     end
   end
 end

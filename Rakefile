@@ -23,10 +23,13 @@ def l(msg, *lv)
 	    STDOUT.puts msg.color(:black).background(:white)
 	  when 'error'
 	    STDOUT.puts msg.color(:yellow).background(:red)
+    else
+      STDOUT.puts msg
 	end
 end
 
 [SRC, TMP].each{ |f| Dir.mkdir f unless Dir.exist? f }
+['css', 'js', 'img', 'unknown'].each{ |f| f = File.join SRC, f; Dir.mkdir f unless Dir.exist? f }
 
 desc 'Merge all css & js source'
 task :merge do
